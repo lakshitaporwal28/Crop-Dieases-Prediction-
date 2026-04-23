@@ -656,3 +656,51 @@ footer {
 /* Utility Classes */
 .mt-4 { margin-top: 1rem; }
 .mb-4 { margin-bottom: 1rem; }
+
+/* Responsive Media Queries */
+@media (max-width: 992px) {
+    /* Layouts */
+    .hero-section { flex-direction: column; }
+    .hero-right { display: none; } /* Focus on the form on smaller screens */
+    .hero-left { padding: 7rem 2rem 3rem; text-align: center; align-items: center;}
+    .page-container { padding: 7rem 2rem 3rem; }
+    
+    /* Header */
+    header { padding: 1rem 2rem; flex-direction: column; gap: 1rem; align-items: center; }
+    nav { gap: 1.5rem; justify-content: center; flex-wrap: wrap; align-items: center;}
+    
+    /* Grids */
+    .history-grid, 
+    .intelligence-grid, 
+    .trust-section, 
+    .mission-section, 
+    .stats-grid, 
+    .result-content { 
+        grid-template-columns: 1fr; 
+        gap: 2rem; 
+    }
+    
+    /* Typography */
+    .hero-title { font-size: 3rem; }
+    .mission-text h1 { font-size: 2.5rem; }
+    
+    /* Image */
+    .mission-image { height: 300px; }
+}
+
+@media (max-width: 576px) {
+    /* Padding & Spacing */
+    .hero-left, .page-container { padding: 6rem 1rem 2rem; }
+    header { padding: 1rem; }
+    
+    /* Typography */
+    .hero-title { font-size: 2.2rem; }
+    .badge { margin-left: auto; margin-right: auto; }
+    
+    /* Cards */
+    .auth-card, .intel-card, .trust-section, .profile-info-card { padding: 1.5rem; }
+    .trust-section { gap: 2rem; }
+    
+    .crop-select { min-width: unset; width: 100%; text-align: left; }
+    .crop-select-wrapper { width: 100%; }
+}
