@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLens - Crop Disease Prediction</title>
+    <!-- Include main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Phosphor Icons for modern iconography -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="brand-logo">AgroLens</a>
+        <nav>
+            <a href="/" class="active">Home</a>
+            <a href="/history">History</a>
+            <a href="/about">About</a>
+            {% if session.get('phone') %}
+                <a href="/logout" style="color: var(--danger-red);">Logout</a>
+                <a href="/profile" class="user-profile" title="Logged in as {{ session.get('name') }}">
+                    <i class="ph ph-user"></i>
+                </a>
+            {% else %}
+                <a href="/login" style="color: var(--primary-green); font-weight: 700;">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- Main Hero Section -->
+    <main class="hero-section">
+
+        <!-- Left Content -->
+        <div class="hero-left">
+            <div class="badge">Precision Agriculture</div>
+            
+            <h1 class="hero-title">
+                Plant diseases detection<br>
+                and <span>health advisory<br>system.</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                Instant identification of diseases across multiple crop species. Secure your yield with laboratory-grade accuracy from the palm of your hand.
+            </p>
+
+            <form action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data" class="predict-form" id="main-form">
+                <div class="crop-select-wrapper">
+                    <select name="crop" class="crop-select" required>
+                        <option value="apple" selected>Choose Crop: Apple</option>
+                        <option value="corn">Choose Crop: Corn</option>
+                        <option value="potato">Choose Crop: Potato</option>
+                        <option value="strawberry">Choose Crop: Strawberry</option>
+                    </select>
+                    <i class="ph ph-caret-down crop-select-icon"></i>
+                </div>
+                
+                <input type="file" name="file" id="file-input" accept="image/jpeg, image/png, image/tiff" required>
+                <!-- We will handle upload UI on the right side -->
+            </form>
+
+
+        </div>
+
+        <!-- Right Content -->
+        <div class="hero-right">
+            <!-- Optional conceptual background plant image from Unsplash for aesthetics -->
+            <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=2000&auto=format&fit=crop" class="hero-bg-image" alt="Leaves background" />
+            
+            <div class="upload-card-wrapper">
+                <div class="upload-card-header">
+                    <h3>Diagnostic Upload</h3>
+                    <div class="info-icon">i</div>
+                </div>
+                
+                <div class="upload-area" id="drop-zone">
+                    <div class="upload-icon">
+                        <i class="ph ph-upload-simple"></i>
+                    </div>
+                    <h4>Drop diseased crop image</h4>
+                    <p>Support JPG, PNG or TIFF (Max 15MB)</p>
+                    <button type="button" class="btn-primary" id="browse-btn">Browse Files</button>
+                    <div id="file-name-display" class="mt-4" style="font-size: 0.85rem; font-weight: 500; color: var(--primary-green);"></div>
+                </div>
+
+                <div class="results-guide">
+                    <h5>Best Results Guide</h5>
+                    <div class="guide-tags">
+                        <div class="guide-tag">
+                            <i class="ph ph-sun"></i> Natural Light
+                        </div>
+                        <div class="guide-tag">
+                            <i class="ph ph-scan"></i> Clear Focus
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <button type="submit" form="main-form" class="btn-primary btn-full" id="predict-btn" style="display: none;">Run Diagnosis</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <h3 style="margin-bottom: 0.5rem; color: var(--text-dark);">Analyzing Specimen...</h3>
+        <p style="color: var(--text-muted);">Running deep neural networks on image data</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

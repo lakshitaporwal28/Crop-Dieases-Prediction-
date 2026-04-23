@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLens - Analysis History</title>
+    <!-- Include main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        header {
+            background: white !important;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .history-layout {
+            padding: 8rem 6rem 4rem;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+        }
+
+        .history-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            background: #f0f2f1;
+            border: none;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            width: 280px;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .filter-btn {
+            background: #f0f2f1;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-image-wrap {
+            position: relative;
+            height: 200px;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-critical { background: #ffebee; color: var(--danger-red); }
+        .status-healthy { background: var(--accent-green); color: var(--primary-green); }
+        .status-warning { background: #fff8e1; color: #b9770e; }
+
+        .card-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-crop-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .card-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-disease {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-disease.critical { color: var(--danger-red); }
+        .card-disease.healthy { color: var(--primary-green); }
+        .card-disease.warning { color: #b9770e; }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+        
+        .view-report {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .new-analysis-card {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-light);
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 2rem;
+            min-height: 380px;
+        }
+
+        .new-analysis-card:hover {
+            border-color: var(--primary-green);
+            background: #f0fdf4;
+        }
+
+        .new-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .load-more {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary-green);
+            color: var(--primary-green);
+            background: transparent;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-green);
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="/" class="brand-logo">AgroLens</a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/history" class="active">History</a>
+            <a href="/about">About</a>
+            {% if session.get('phone') %}
+                <a href="/logout" style="color: var(--danger-red);">Logout</a>
+                <div class="user-profile" title="Logged in as {{ session.get('name') }}">
+                    <i class="ph ph-user"></i>
+                </div>
+            {% else %}
+                <a href="/login" style="color: var(--primary-green); font-weight: 700;">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page-container history-layout">
+        
+        <div class="history-header">
+            <div>
+                <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Analysis History</h1>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Review your past crop diagnostics and monitor the health trends of your field over time.</p>
+            </div>
+
+        </div>
+        
+        {% if mongo_error %}
+        <div style="background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+            <strong>Database Connection Error:</strong> {{ mongo_error }}
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Please verify your MongoDB Atlas connection string and IP whitelist.</p>
+        </div>
+        {% endif %}
+
+        <div class="history-grid">
+            {% for item in history %}
+            <div class="history-card">
+                <div class="card-image-wrap">
+                    <img src="{{ url_for('static', filename='uploads/' + item.filename) if item.filename else 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=800&auto=format&fit=crop' }}" class="card-image">
+                    {% set status_class = 'healthy' if item.disease_status == 'Healthy' else 'critical' %}
+                    <div class="status-badge status-{{ status_class }}">{{ item.disease_status }}</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-header-row">
+                        <div class="card-crop-name">{{ item.crop }}</div>
+                        <div class="card-date">{{ item.date.strftime('%b %d, %Y') if item.date else '' }}</div>
+                    </div>
+                    {% set disease_class = 'healthy' if item.disease_status == 'Healthy' else 'critical' %}
+                    <div class="card-disease {{ disease_class }}">{{ item.disease }}</div>
+                    <div class="card-desc">Confidence: {{ item.confidence }}<br>Severity: {{ item.severity }}</div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('static', filename='uploads/' + item.filename) if item.filename else '#' }}" class="view-report" target="_blank">View Image <i class="ph ph-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: var(--text-muted);">
+                <i class="ph ph-plant" style="font-size: 4rem; margin-bottom: 1rem; color: #ddd;"></i>
+                <h3>No analysis history found</h3>
+                <p>Once you analyze your crops, the reports will appear here.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+
+
+    </main>
+
+</body>
+</html>

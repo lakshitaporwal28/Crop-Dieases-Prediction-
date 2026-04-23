@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLens - Analysis Complete</title>
+    <!-- Include main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .result-layout {
+            padding: 8rem 8rem 4rem;
+        }
+        header {
+            background: white !important;
+            border-bottom: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="/" class="brand-logo">AgroLens</a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/history">History</a>
+            <a href="/about">About</a>
+            {% if session.get('phone') %}
+                <a href="/logout" style="color: var(--danger-red);">Logout</a>
+                <a href="/profile" class="user-profile" title="Logged in as {{ session.get('name') }}">
+                    <i class="ph ph-user"></i>
+                </a>
+            {% else %}
+                <a href="/login" style="color: var(--primary-green); font-weight: 700;">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page-container result-layout">
+        
+        <div class="result-header">
+            <div class="breadcrumb">
+                <i class="ph ph-arrow-left"></i> Diagnostic Report #8291
+            </div>
+            <h1 class="result-title">Analysis Complete</h1>
+        </div>
+
+        <div class="result-content">
+            <!-- Left Image Card -->
+            <div class="result-image-card">
+                <img src="{{ url_for('static', filename='uploads/' + filename) if filename else 'https://images.unsplash.com/photo-1615814510006-2c5e5aa495d2?q=80&w=1200&auto=format&fit=crop' }}" class="result-image" alt="Uploaded leaf scan">
+                <div class="scan-badge">
+                    <i class="ph ph-check-circle-fill"></i> Original Scan
+                </div>
+                <div class="image-meta">
+                    <h4>Uploaded Specimen</h4>
+                    <p>Analyzed on image payload. Image clarity: High.</p>
+                </div>
+            </div>
+
+            <!-- Right Analysis Card -->
+            <div class="analysis-card">
+                <div class="danger-badge">
+                    <i class="ph ph-warning"></i> {{ disease_status | default('Pathogen Detected') }}
+                </div>
+                
+                <h2 class="disease-name">{{ prediction | default('Apple Scab') }}</h2>
+                <div class="disease-species">Venturia inaequalis (Fungal Pathogen)</div>
+
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-label">Confidence</div>
+                        <div class="metric-value" style="color: var(--primary-green);">{{ confidence | default('94.2%') }} <i class="ph ph-trend-up"></i></div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Severity</div>
+                        <div class="metric-value moderate">{{ severity | default('Moderate') }} <i class="ph ph-triangle"></i></div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="/" class="btn-secondary">Analyze Another</a>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+

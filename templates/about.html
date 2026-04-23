@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLens - About</title>
+    <!-- Include main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        header {
+            background: white !important;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .about-layout {
+            padding: 8rem 8rem 4rem;
+        }
+
+        /* Mission Section */
+        .mission-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .mission-text h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .mission-text h1 span {
+            color: var(--primary-green);
+        }
+
+        .mission-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .mission-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Intelligence Layer */
+        .section-title {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--primary-green);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-family: 'Outfit';
+            font-weight: 700;
+        }
+
+        .intelligence-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 6rem;
+        }
+
+        .intel-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .intel-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .intel-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .intel-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Trust Section */
+        .trust-section {
+            background: var(--bg-light);
+            border-radius: 24px;
+            padding: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .trust-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .trust-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .trust-points {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .trust-point {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .trust-point-icon {
+            color: var(--primary-green);
+            font-size: 1.25rem;
+            margin-top: 0.2rem;
+        }
+
+        .trust-point-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .trust-point-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .trust-graphics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .graphic-card {
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 180px;
+        }
+
+        .graphic-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .graphic-card.green-bg {
+            background: var(--primary-green);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding: 1.5rem;
+        }
+
+        .graphic-card.text-bg {
+            background: #233544;
+            color: white;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="/" class="brand-logo">AgroLens</a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/history">History</a>
+            <a href="/about" class="active">About</a>
+            {% if session.get('phone') %}
+                <a href="/logout" style="color: var(--danger-red);">Logout</a>
+                <a href="/profile" class="user-profile" title="Logged in as {{ session.get('name') }}">
+                    <i class="ph ph-user"></i>
+                </a>
+            {% else %}
+                <a href="/login" style="color: var(--primary-green); font-weight: 700;">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page-container about-layout">
+        
+        <!-- Mission Section -->
+        <div class="mission-section">
+            <div class="mission-text">
+                <div class="badge">Our Mission</div>
+                <h1>Empowering global farming through <span>Precision AI.</span></h1>
+                <p class="mission-desc">
+                    Our mission is to support farmers globally by providing fast and accurate crop disease diagnostics using cutting-edge AI. We bridge the gap between deep botanical science and field-ready technology.
+                </p>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=1200&auto=format&fit=crop" class="mission-image" alt="Farmer in field">
+            </div>
+        </div>
+
+        <!-- Intelligence Layer Section -->
+        <h2 class="section-title">The Intelligence Layer</h2>
+        <div class="intelligence-grid">
+            <div class="intel-card">
+                <div class="intel-icon">
+                    <i class="ph ph-brain"></i>
+                </div>
+                <div class="intel-title">AI-Powered Identification</div>
+                <div class="intel-desc">Neural networks trained on millions of pathological samples provide diagnostics with up to 99% accuracy in seconds.</div>
+            </div>
+            
+            <div class="intel-card">
+                <div class="intel-icon">
+                    <i class="ph ph-plant"></i>
+                </div>
+                <div class="intel-title">Wide Crop Coverage</div>
+                <div class="intel-desc">From staple grains to exotic fruit varieties, our database covers over 150+ crop types and 400+ specific diseases.</div>
+            </div>
+
+            <div class="intel-card">
+                <div class="intel-icon">
+                    <i class="ph ph-lightning"></i>
+                </div>
+                <div class="intel-title">Real-Time Results</div>
+                <div class="intel-desc">No lab waiting times. Get actionable insights directly in the field, even with limited connectivity.</div>
+            </div>
+        </div>
+
+
+
+    </main>
+
+
+
+</body>
+</html>
